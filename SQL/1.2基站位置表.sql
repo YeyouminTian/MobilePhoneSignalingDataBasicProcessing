@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS nc_1_2base_station_long_lat_CGI(
+	"LONGITUDE" DECIMAL,
+	"LATITUDE" DECIMAL,
+	"CGI" INT8
+);
+
+
+INSERT INTO nc_1_2base_station_long_lat_CGI("LONGITUDE","LATITUDE","CGI")
+SELECT DISTINCT "LONGITUDE","LATITUDE","CGI"
+FROM nanchang_alldata
