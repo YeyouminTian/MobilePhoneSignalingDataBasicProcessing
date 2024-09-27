@@ -1,7 +1,7 @@
 
-DROP TABLE IF EXISTS tianyeyoumin.nanchang_alldata;
+DROP TABLE IF EXISTS nanchang_alldata;
 
-CREATE table if not exists tianyeyoumin.nanchang_alldata(
+CREATE table if not exists nanchang_alldata(
 	USERID VARCHAR(255) PRIMARY KEY,
 	STARTIME VARCHAR(255),
 	SDRTYPE INT2,
