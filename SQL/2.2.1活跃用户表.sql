@@ -4,19 +4,15 @@ DROP TABLE IF EXISTS nc_2_1_active_users_1h;
 CREATE TABLE IF NOT EXISTS nc_2_1_active_users_1h (
     "DATE" DATE,          -- 日期部分
     "USERID" VARCHAR(255), -- 用户 ID
-    "DURATION" INT,       -- 活动持续时间（分钟）
-    "STARTTIME" TIMESTAMP, -- 用户最早出现时间
-    "ENDTIME" TIMESTAMP   -- 用户最后出现时间
+    "total_duration" INT,       -- 活动持续时间（分钟）
 );
 INSERT INTO nc_2_1_active_users_1h
 SELECT 
     "DATE",
     "USERID",
-    "DURATION",
-    "STARTTIME",
-    "ENDTIME"
+    "total_duration"
 
 FROM 
     nc_2_0_user_stay_time
 WHERE 
-    "DURATION" >= 60;  -- 过滤累计活动时长至少为一小时的用户
+    "total_duration" >= 60;  -- 过滤累计活动时长至少为一小时的用户
