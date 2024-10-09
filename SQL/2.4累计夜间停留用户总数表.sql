@@ -100,16 +100,16 @@ CREATE TABLE IF NOT EXISTS nc_2_1_4_night_longest_stay_base_station_user_count (
     "LONGITUDE" FLOAT,
     "LATITUDE" FLOAT,
     "TOTAL_USER_COUNT" BIGINT
-);          
+);
 
 -- 插入每个位置的每日和七天内的累计夜间停留用户总数
 INSERT INTO nc_2_1_4_night_longest_stay_base_station_user_count
 
 SELECT
-            "LONGITUDE",
-            "LATITUDE",
-            sum("DAILY_USER_COUNT") AS "TOTAL_USER_COUNT"
+    "LONGITUDE",
+    "LATITUDE",
+    sum("DAILY_USER_COUNT") AS "TOTAL_USER_COUNT"
 FROM
-            nc_2_1_4_night_longest_stay_base_station_7days
+    nc_2_1_4_night_longest_stay_base_station_7days
 GROUP BY
-            "LONGITUDE", "LATITUDE";
+    "LONGITUDE", "LATITUDE";
