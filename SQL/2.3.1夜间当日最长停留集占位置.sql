@@ -46,7 +46,7 @@ WITH night_stays AS (
         "USERID",
         "LONGITUDE",
         "LATITUDE",
-        SUM("DURATION") AS "DURATION",
+        SUM("DURATION_MIN") AS "DURATION",
         MIN("STARTTIME") AS "MIN_STARTTIME"
     FROM 
         nc_user_stay_time_location
@@ -80,7 +80,7 @@ SELECT
     "LONGITUDE",
     "LATITUDE",
     SUM("DURATION") AS "DURATION",
-    ROW_NUMBER() OVER (PARTITION BY "DATE", "USERID" ORDER BY SUM("DURATION") DESC) AS rn
+    ROW_NUMBER() OVER (PARTITION BY "USERID", "DATE" ORDER BY SUM("DURATION") DESC) AS rn
 FROM 
     stay_groups
 GROUP BY 
@@ -90,16 +90,16 @@ GROUP BY
 INSERT INTO tianyeyoumin.nc_2_1_3_1_30min_user_night_longest_stay
 SELECT "DATE", "USERID", "LONGITUDE", "LATITUDE", "DURATION"
 FROM tianyeyoumin.nc_2_1_3_1_aggregated_stays
-WHERE "DURATION" > 30 AND rn = 1;
+WHERE "DURATION" > 1800 AND rn = 1;
 
 INSERT INTO tianyeyoumin.nc_2_1_3_1_60min_user_night_longest_stay
 ("DATE", "USERID", "LONGITUDE", "LATITUDE", "DURATION")
 SELECT "DATE", "USERID", "LONGITUDE", "LATITUDE", "DURATION"
 FROM tianyeyoumin.nc_2_1_3_1_aggregated_stays
-WHERE "DURATION" > 60 AND rn = 1;
+WHERE "DURATION" > 3600 AND rn = 1;
 
 INSERT INTO tianyeyoumin.nc_2_1_3_1_90min_user_night_longest_stay
 ("DATE", "USERID", "LONGITUDE", "LATITUDE", "DURATION")
 SELECT "DATE", "USERID", "LONGITUDE", "LATITUDE", "DURATION"
 FROM tianyeyoumin.nc_2_1_3_1_aggregated_stays
-WHERE "DURATION" > 90 AND rn = 1;
+WHERE "DURATION" > 5400 AND rn = 1;

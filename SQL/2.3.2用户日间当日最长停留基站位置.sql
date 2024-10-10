@@ -17,7 +17,7 @@ WITH user_stay_time AS (
         "LONGITUDE",
         "LATITUDE",
         SUM("DURATION") AS "DURATION",
-        ROW_NUMBER() OVER (PARTITION BY "DATE", "USERID" ORDER BY SUM("DURATION") DESC) AS rn
+        ROW_NUMBER() OVER (PARTITION BY  "USERID","DATE" ORDER BY SUM("DURATION") DESC) AS rn
     FROM 
         nc_user_stay_time_location
     WHERE 
