@@ -45,3 +45,25 @@ JOIN
     user_workdays uw ON lc."USERID" = uw."USERID"
 WHERE 
     CAST(lc.appearance_count AS FLOAT) / uw.total_workdays > 0.5;
+
+-- 创建新表来存储每个工作地经纬度的用户数量
+DROP TABLE IF EXISTS nc_3_2_2_work_location_user_count;
+CREATE TABLE IF NOT EXISTS nc_3_2_2_work_location_user_count (
+    "LONGITUDE" FLOAT,
+    "LATITUDE" FLOAT,
+    "USER_COUNT" INT
+);
+
+-- 插入数据：计算每个工作地经纬度的不同用户数量
+INSERT INTO nc_3_2_2_work_location_user_count
+SELECT 
+    "LONGITUDE",
+    "LATITUDE",
+    COUNT(DISTINCT "USERID") as "USER_COUNT"
+FROM 
+    nc_3_2_2_user_work_location
+GROUP BY 
+    "LONGITUDE", "LATITUDE";
+
+-- 可以添加一个索引来优化查询性能（可选）
+CREATE INDEX idx_work_location_user_count ON nc_3_2_2_work_location_user_count ("LONGITUDE", "LATITUDE");
