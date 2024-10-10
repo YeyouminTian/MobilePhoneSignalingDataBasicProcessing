@@ -11,16 +11,7 @@ CREATE TABLE IF NOT EXISTS nc_3_2_2_user_work_location (
 );
 
 -- 插入数据
-WITH user_workdays AS (
-    SELECT 
-        "USERID",
-        COUNT(DISTINCT "DATE") AS total_workdays
-    FROM 
-        nc_3_2_1_user_workday_longest_stay
-    GROUP BY 
-        "USERID"
-),
-location_counts AS (
+WITH location_counts AS (
     SELECT 
         "USERID",
         "LONGITUDE",
@@ -37,14 +28,12 @@ SELECT
     lc."LONGITUDE",
     lc."LATITUDE",
     lc.appearance_count,
-    uw.total_workdays,
-    CAST(lc.appearance_count AS FLOAT) / uw.total_workdays AS appearance_ratio
+    5 AS total_workdays,
+    CAST(lc.appearance_count AS FLOAT) / 5 AS appearance_ratio
 FROM 
     location_counts lc
-JOIN 
-    user_workdays uw ON lc."USERID" = uw."USERID"
 WHERE 
-    CAST(lc.appearance_count AS FLOAT) / uw.total_workdays > 0.5;
+    CAST(lc.appearance_count AS FLOAT) / 5 > 0.5;
 
 -- 创建新表来存储每个工作地经纬度的用户数量
 DROP TABLE IF EXISTS nc_3_2_2_work_location_user_count;
