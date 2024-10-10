@@ -38,3 +38,19 @@ FROM
     user_stay_time
 WHERE 
     rn = 1;
+
+
+-- 插入数据：计算每个经纬度的不同用户数量
+INSERT INTO nc_2_3_2_day_longest_stay_location_user_count
+SELECT 
+    "DATE",
+    "LONGITUDE",
+    "LATITUDE",
+    COUNT(DISTINCT "USERID") as "USER_COUNT"
+FROM 
+    nc_2_1_3_1_60min_user_day_longest_stay
+GROUP BY 
+    "DATE", "LONGITUDE", "LATITUDE";
+
+-- 可以添加一个索引来优化查询性能（可选）
+CREATE INDEX idx_location_user_count ON nc_2_3_2_day_longest_stay_location_user_count ("DATE", "LONGITUDE", "LATITUDE");

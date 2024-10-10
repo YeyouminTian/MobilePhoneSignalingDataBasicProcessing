@@ -48,3 +48,26 @@ FROM
     user_max_stays
 WHERE 
     rn = 1 AND percentage > 0.5;
+
+-- 新增查询：统计不同经纬度下的人数
+DROP TABLE IF EXISTS nc_3_1_2_location_user_count;
+CREATE TABLE IF NOT EXISTS nc_3_1_2_location_user_count (
+    "LONGITUDE" FLOAT8,
+    "LATITUDE" FLOAT8,
+    "USER_COUNT" INT
+);
+
+INSERT INTO nc_3_1_2_location_user_count
+SELECT 
+    "LONGITUDE",
+    "LATITUDE",
+    COUNT(DISTINCT "USERID") AS "USER_COUNT"
+FROM 
+    nc_3_1_2_user_longest_stay_base_station
+GROUP BY 
+    "LONGITUDE", "LATITUDE"
+ORDER BY 
+    "USER_COUNT" DESC;
+
+-- 可以添加一个查询来显示结果
+-- SELECT * FROM nc_3_1_2_location_user_count ORDER BY "USER_COUNT" DESC LIMIT 10;
