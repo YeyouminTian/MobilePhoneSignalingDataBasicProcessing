@@ -29,4 +29,6 @@ WHERE
     AND h."LATITUDE" IS NOT NULL;
 
 -- 查询结果
-SELECT * FROM nc_3_3_user_work_home_location LIMIT 10;
+SELECT count(*) FROM nc_3_3_user_work_home_location;
+
+-- 284741

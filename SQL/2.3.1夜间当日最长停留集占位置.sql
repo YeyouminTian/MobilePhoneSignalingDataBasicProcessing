@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS tianyeyoumin.nc_2_1_3_1_30min_user_night_longest_stay;
 DROP TABLE IF EXISTS tianyeyoumin.nc_2_1_3_1_60min_user_night_longest_stay;
 DROP TABLE IF EXISTS tianyeyoumin.nc_2_1_3_1_90min_user_night_longest_stay;
+DROP TABLE IF EXISTS tianyeyoumin.nc_2_1_3_1_aggregated_stays;
 
 -- 创建30分钟停留表
 CREATE TABLE IF NOT EXISTS tianyeyoumin.nc_2_1_3_1_30min_user_night_longest_stay (
@@ -103,3 +104,25 @@ INSERT INTO tianyeyoumin.nc_2_1_3_1_90min_user_night_longest_stay
 SELECT "DATE", "USERID", "LONGITUDE", "LATITUDE", "DURATION"
 FROM tianyeyoumin.nc_2_1_3_1_aggregated_stays
 WHERE "DURATION" > 5400 AND rn = 1;
+
+
+DROP TABLE IF EXISTS tianyeyoumin.nc_daily_users_with_residence;
+
+-- 创建新表来存储每日有居住地的用户统计
+CREATE TABLE IF NOT EXISTS tianyeyoumin.nc_daily_users_with_residence (
+    "DATE" DATE PRIMARY KEY,
+    "USER_COUNT" INT
+);
+
+-- 从60min_user_night_longest_stay表插入数据到新表
+INSERT INTO tianyeyoumin.nc_daily_users_with_residence ("DATE", "USER_COUNT")
+SELECT 
+    "DATE",
+    COUNT(DISTINCT "USERID") AS "USER_COUNT"
+FROM tianyeyoumin.nc_2_1_3_1_60min_user_night_longest_stay
+GROUP BY "DATE"
+ORDER BY "DATE";
+
+-- 查看新表的内容
+SELECT * FROM tianyeyoumin.nc_daily_users_with_residence
+ORDER BY "DATE";
